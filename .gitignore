@@ -22,3 +22,6 @@ go.work
 
 # Ignore .vscode folder
 .vscode/
+
+# Ignore tmp folder
+tmp/
