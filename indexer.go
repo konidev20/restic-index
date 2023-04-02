@@ -30,7 +30,6 @@ type IndexOptions struct {
 
 type Repo struct {
 	Location string
-
 	Password string
 }
 
