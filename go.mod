@@ -5,6 +5,7 @@ go 1.19
 require (
 	github.com/blugelabs/bluge v0.2.2
 	github.com/konidev20/restic-api v0.0.0-20230401193404-afc5b0dcaa57
+	github.com/rs/zerolog v1.29.0
 	github.com/syndtr/goleveldb v1.0.1-0.20210819022825-2ae1ddf74ef7
 )
 
@@ -29,6 +30,8 @@ require (
 	github.com/golang/snappy v0.0.4 // indirect
 	github.com/klauspost/compress v1.16.3 // indirect
 	github.com/klauspost/cpuid/v2 v2.2.4 // indirect
+	github.com/mattn/go-colorable v0.1.13 // indirect
+	github.com/mattn/go-isatty v0.0.18 // indirect
 	github.com/minio/sha256-simd v1.0.0 // indirect
 	github.com/mschoch/smat v0.2.0 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
