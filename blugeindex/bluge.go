@@ -11,7 +11,7 @@ import (
 	"github.com/blugelabs/bluge/index"
 	"github.com/blugelabs/bluge/search"
 	"github.com/blugelabs/bluge/search/similarity"
-	"github.com/konidev20/restic-index/internal/qs"
+	"github.com/konidev20/rindex/internal/qs"
 	"github.com/syndtr/goleveldb/leveldb"
 	"github.com/syndtr/goleveldb/leveldb/opt"
 )

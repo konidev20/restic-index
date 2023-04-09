@@ -4,7 +4,7 @@ import (
 	"os"
 
 	"github.com/blugelabs/bluge/analysis"
-	"github.com/konidev20/restic-index/blugeindex"
+	"github.com/konidev20/rindex/blugeindex"
 	"github.com/rs/zerolog"
 )
 

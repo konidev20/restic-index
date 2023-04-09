@@ -7,7 +7,7 @@ import (
 
 	"github.com/blugelabs/bluge"
 	"github.com/blugelabs/bluge/search"
-	"github.com/konidev20/restic-index/internal/testutil"
+	"github.com/konidev20/rindex/internal/testutil"
 )
 
 func TestIndex(t *testing.T) {

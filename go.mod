@@ -1,4 +1,4 @@
-module github.com/konidev20/restic-index
+module github.com/konidev20/rindex
 
 go 1.19
 
