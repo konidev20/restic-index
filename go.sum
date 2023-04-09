@@ -93,8 +93,8 @@ github.com/klauspost/compress v1.16.3/go.mod h1:ntbaceVETuRiXiv4DpjP66DpAtAGkEQs
 github.com/klauspost/cpuid/v2 v2.0.4/go.mod h1:FInQzS24/EEf25PyTYn52gqo7WaD8xa0213Md/qVLRg=
 github.com/klauspost/cpuid/v2 v2.2.4 h1:acbojRNwl3o09bUq+yDCtZFc1aiwaAAxtcn8YkZXnvk=
 github.com/klauspost/cpuid/v2 v2.2.4/go.mod h1:RVVoqg1df56z8g3pUjL/3lE5UfnlrJX8tyFgg4nqhuY=
-github.com/konidev20/restic-api v0.0.0-20230401193404-afc5b0dcaa57 h1:cl4gKN5+fcopB0lCYAkmWG0wKXgKnADH0T6ihOqaJ3I=
-github.com/konidev20/restic-api v0.0.0-20230401193404-afc5b0dcaa57/go.mod h1:IqfK3WZz13ce+s1p8hDtda19l0zZ/UPvgCfznGNkqqg=
+github.com/konidev20/rapi v0.0.0-20230401193404-afc5b0dcaa57 h1:cl4gKN5+fcopB0lCYAkmWG0wKXgKnADH0T6ihOqaJ3I=
+github.com/konidev20/rapi v0.0.0-20230401193404-afc5b0dcaa57/go.mod h1:IqfK3WZz13ce+s1p8hDtda19l0zZ/UPvgCfznGNkqqg=
 github.com/leesper/go_rng v0.0.0-20190531154944-a612b043e353 h1:X/79QL0b4YJVO5+OsPH9rF2u428CIrGL/jLmPsoOQQ4=
 github.com/leesper/go_rng v0.0.0-20190531154944-a612b043e353/go.mod h1:N0SVk0uhy+E1PZ3C9ctsPRlvOPAFPkCNlcPBDkt0N3U=
 github.com/magiconair/properties v1.8.0/go.mod h1:PppfXfuXeibc/6YijjN8zIbojt8czPbwD3XqdrwzmxQ=

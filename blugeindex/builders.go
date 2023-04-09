@@ -2,8 +2,8 @@ package blugeindex
 
 import (
 	"github.com/blugelabs/bluge"
-	"github.com/konidev20/restic-api/repository"
-	"github.com/konidev20/restic-api/restic"
+	"github.com/konidev20/rapi/repository"
+	"github.com/konidev20/rapi/restic"
 )
 
 // DocumentBuilder is the interface custom indexers should implement.
