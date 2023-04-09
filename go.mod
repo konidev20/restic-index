@@ -4,7 +4,7 @@ go 1.19
 
 require (
 	github.com/blugelabs/bluge v0.2.2
-	github.com/konidev20/rapi v0.0.0-20230401193404-afc5b0dcaa57
+	github.com/konidev20/rapi v0.0.0-20230409170757-9956c0bd9882
 	github.com/rs/zerolog v1.29.0
 	github.com/syndtr/goleveldb v1.0.1-0.20210819022825-2ae1ddf74ef7
 )
