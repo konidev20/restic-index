@@ -25,3 +25,6 @@ go.work
 
 # Ignore tmp folder
 tmp/
+
+# add .DS_Store to .gitignore
+.DS_Store
