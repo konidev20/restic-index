@@ -1,4 +1,4 @@
-package main
+package rindex
 
 // Filter determines if a file should be indexed or not
 type Filter interface {
