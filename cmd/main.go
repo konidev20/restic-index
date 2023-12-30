@@ -16,43 +16,43 @@ func main() {
 	ctx, cancel := context.WithCancel(ctx)
 	defer cancel()
 
-	// indexer, err := rindex.New("test/tmp", "D:/test", "test123")
-	// if err != nil {
-	// 	fmt.Printf("could not initialize the indexer: %v", err)
-	// }
-
-	// statsChannel := make(chan rindex.IndexStats)
-
-	// stats, err := indexer.Index(ctx, rindex.DefaultIndexOptions, statsChannel)
-	// if err != nil {
-	// 	fmt.Printf("could not index repository : %v", err)
-	// }
-
-	// rapi.Printf("%v", stats)
-
-	indexer, err := rindex.NewOffline("test/tmp", "D:/test", "test123")
+	indexer, err := rindex.New("test/tmp", "/Users/srigovindnayak/test-repo", "root")
 	if err != nil {
 		fmt.Printf("could not initialize the indexer: %v", err)
 	}
 
-	fVisitor := func(field string, value []byte) bool {
-		printMetadata(field, value)
-		return true
-	}
+	statsChannel := make(chan rindex.IndexStats)
 
-	srVisitor := func() bool {
-		fmt.Println("=====================================")
-		return true
-	}
-
-	query := `filename:/.*\.(zip|ttf)/`
-
-	count, err := indexer.Search(query, fVisitor, srVisitor)
+	stats, err := indexer.Index(ctx, rindex.DefaultIndexOptions, statsChannel)
 	if err != nil {
-		fmt.Printf("could not search the index: %v", err)
+		fmt.Printf("could not index repository : %v", err)
 	}
 
-	fmt.Println("number of matches: ", count)
+	fmt.Printf("%v", stats)
+
+	// indexer, err := rindex.NewOffline("test/tmp", "D:/test", "test123")
+	// if err != nil {
+	// 	fmt.Printf("could not initialize the indexer: %v", err)
+	// }
+
+	// fVisitor := func(field string, value []byte) bool {
+	// 	printMetadata(field, value)
+	// 	return true
+	// }
+
+	// srVisitor := func() bool {
+	// 	fmt.Println("=====================================")
+	// 	return true
+	// }
+
+	// query := `filename:/.*\.(zip|ttf)/`
+
+	// count, err := indexer.Search(query, fVisitor, srVisitor)
+	// if err != nil {
+	// 	fmt.Printf("could not search the index: %v", err)
+	// }
+
+	// fmt.Println("number of matches: ", count)
 }
 
 func printMetadata(field string, value []byte) {

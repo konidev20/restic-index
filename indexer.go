@@ -9,13 +9,14 @@ import (
 	"os"
 	"path/filepath"
 	"sync"
+	"time"
 
 	"github.com/blugelabs/bluge"
 	"github.com/blugelabs/bluge/analysis"
 	"github.com/konidev20/rapi"
-	"github.com/konidev20/rapi/backend"
 	"github.com/konidev20/rapi/repository"
 	"github.com/konidev20/rapi/restic"
+	"github.com/konidev20/rapi/ui/progress"
 	"github.com/konidev20/rapi/walker"
 	"github.com/konidev20/rindex/blugeindex"
 	"github.com/rs/zerolog"
@@ -127,11 +128,77 @@ func New(indexPath string, repo, pass string) (Indexer, error) {
 	return indexer, err
 }
 
+func (i *Indexer) SQLiteFileIndex(ctx context.Context, indexStats chan IndexStats) (IndexStats, error) {
+	stats := NewStats()
+
+	resetEnv()
+	ropts := rapi.DefaultOptions
+	ropts.Repo = i.RepositoryLocation
+	ropts.Password = i.RepositoryPassword
+	log.Info().Msg("environment initialized")
+
+	//open the repository
+	repo, err := rapi.OpenRepository(ctx, ropts)
+	if err != nil {
+		stats.ErrorsAdd(err)
+		log.Error().Err(err).Msg("error opening repository")
+		return stats, err
+	}
+	log.Info().Msg("repository opened")
+
+	indexCounter := progress.NewCounter(time.Second, 0, func(value, total uint64, runtime time.Duration, final bool) {})
+
+	//load index of the repository into the context
+	if err = repo.LoadIndex(ctx, indexCounter); err != nil {
+		stats.ErrorsAdd(err)
+		log.Error().Err(err).Msg("error loading repository index")
+		return stats, err
+	}
+	log.Info().Msg("index loaded")
+
+	snapshotLister, err := restic.MemorizeList(ctx, repo, restic.SnapshotFile)
+	if err != nil {
+		stats.ErrorsAdd(err)
+		log.Error().Err(err).Msg("error memorizing snapshot list")
+		return stats, err
+	}
+	log.Info().Msg("memorized list of snapshots")
+
+	err = restic.ForAllSnapshots(ctx, snapshotLister, repo, nil, func(id restic.ID, snap *restic.Snapshot, err error) error {
+		if err != nil {
+			stats.ErrorsAdd(err)
+			log.Error().Err(err).Msgf("error loading snapshot %s", id)
+			return err
+		}
+
+		if i.Has(id) {
+			log.Info().Msgf("snapshot %s already indexed", id)
+			return nil
+		}
+
+		err = walker.Walk(ctx, repo, *snap.Tree, nil, func(_ restic.ID, nodepath string, node *restic.Node, err error) (bool, error) {
+			if err == nil && node != nil && node.Type == "file" {
+				fmt.Println(nodepath)
+			}
+
+			return false, err
+		})
+
+		return nil
+	})
+
+	return stats, err
+}
+
+func (i *Indexer) Has(restic.ID) bool {
+	return false
+}
+
 // Index will start indexing the repository.
 //
 // A channel can be passed to follow the indexing process in real time. IndexStats is sent to
 // the channel every time a new file is indexed.
-func (i *Indexer) Index(ctx context.Context, opts IndexOptions, progress chan IndexStats) (IndexStats, error) {
+func (i *Indexer) Index(ctx context.Context, opts IndexOptions, indexStats chan IndexStats) (IndexStats, error) {
 	var err error
 
 	if opts.DocumentBuilder == nil {
@@ -182,8 +249,10 @@ func (i *Indexer) Index(ctx context.Context, opts IndexOptions, progress chan In
 		log.Debug().Msgf("missing snapshots: %d", len(snaps))
 	}()
 
+	indexCounter := progress.NewCounter(time.Second, 0, func(value, total uint64, runtime time.Duration, final bool) {})
+
 	log.Debug().Msg("loading index")
-	if err = repo.LoadIndex(ctx); err != nil {
+	if err = repo.LoadIndex(ctx, indexCounter); err != nil {
 		return stats, err
 	}
 	log.Debug().Msg("index loaded")
@@ -202,7 +271,7 @@ func (i *Indexer) Index(ctx context.Context, opts IndexOptions, progress chan In
 		wg.Done()
 	}()
 
-	snapshotLister, err := backend.MemorizeList(ctx, repo.Backend(), restic.SnapshotFile)
+	snapshotLister, err := restic.MemorizeList(ctx, repo, restic.SnapshotFile)
 	if err != nil {
 		return stats, err
 	}
@@ -247,7 +316,7 @@ func (i *Indexer) Index(ctx context.Context, opts IndexOptions, progress chan In
 		stats.SetCurrentSnapshotTotalFiles(c)
 
 		stats.ScannedSnapshotsInc()
-		i.walkSnapshot(ctx, repo, snap, &stats, opts, progress, ichan)
+		i.walkSnapshot(ctx, repo, snap, &stats, opts, indexStats, ichan)
 
 		err = i.inCache(func(cache *leveldb.DB) error {
 			return cache.Put(snap.ID()[:], []byte{}, nil)
